@@ -1,8 +1,13 @@
 import './App.css'
+import { AuthProvider } from './context/AuthContext'
 import HomePage from './pages/HomePage'
 
 function App() {
-  return <HomePage />
+  return (
+    <AuthProvider>
+      <HomePage />
+    </AuthProvider>
+  )
 }
 
 export default App

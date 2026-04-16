@@ -8,6 +8,8 @@ interface FeatureListProps {
   isReordering: boolean
   highlightedId: number | null
   onUpvote: (id: number) => Promise<void>
+  onDelete: (id: number) => Promise<void>
+  canDeleteFeature: (feature: Feature) => boolean
   onReorderStart: () => void
   onReorderEnd: () => void
 }
@@ -18,6 +20,8 @@ function FeatureList({
   isReordering,
   highlightedId,
   onUpvote,
+  onDelete,
+  canDeleteFeature,
   onReorderStart,
   onReorderEnd,
 }: FeatureListProps) {
@@ -50,6 +54,8 @@ function FeatureList({
             isReordering={isReordering}
             isHighlighted={highlightedId === feature.id}
             onUpvote={onUpvote}
+            onDelete={onDelete}
+            canDelete={canDeleteFeature(feature)}
             dataId={feature.id}
           />
         ))}

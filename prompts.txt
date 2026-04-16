@@ -1,3 +1,4 @@
 2026-04-16T10:51:59.0034989-06:00 | Implement attached feature voting plan | Began building the project from scratch, starting with backend setup, then Docker, frontend, tests, and documentation.
 2026-04-16T11:19:07.1222146-06:00 | Improve rapid upvote reorder behavior | Started implementing animated list reordering so cards visibly move during vote-based resorting and are easier to track.
 2026-04-16T11:25:00.6264824-06:00 | Improve reorder UX and click safety | Started adding short reorder locking, clearer motion feedback, and a highlighted updated card to reduce accidental votes during list resorting.
+2026-04-16T11:50:41.3397087-06:00 | Add seed_users command to README | Updated the Docker setup instructions to include running the backend seed command for demo users.

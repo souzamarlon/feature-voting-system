@@ -8,6 +8,7 @@ vi.mock('../services/api', () => ({
   getFeatures: vi.fn(),
   createFeature: vi.fn(),
   upvoteFeature: vi.fn(),
+  deleteFeature: vi.fn(),
 }))
 
 const mockedGetFeatures = vi.mocked(getFeatures)
@@ -22,6 +23,7 @@ describe('HomePage', () => {
         description: 'Improve readability for night usage.',
         votes: 3,
         created_at: '2026-04-16T12:00:00Z',
+        created_by_username: 'admin',
       },
       {
         id: 2,
@@ -29,6 +31,7 @@ describe('HomePage', () => {
         description: 'Filter ideas faster.',
         votes: 1,
         created_at: '2026-04-16T11:00:00Z',
+        created_by_username: 'user',
       },
     ])
   })
@@ -52,6 +55,7 @@ describe('HomePage', () => {
       description: 'Improve readability for night usage.',
       votes: 4,
       created_at: '2026-04-16T12:00:00Z',
+      created_by_username: 'admin',
     })
 
     render(<HomePage />)

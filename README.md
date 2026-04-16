@@ -39,8 +39,12 @@ docker-compose.yml
    ```bash
    docker compose up --build
    ```
-2. Open the app at `http://localhost:3000`.
-3. The backend API is available at `http://localhost:8000`.
+2. Seed the demo users for authentication:
+   ```bash
+   docker compose exec backend python manage.py seed_users
+   ```
+3. Open the app at `http://localhost:3000`.
+4. The backend API is available at `http://localhost:8000`.
 
 ### Notes
 - In Docker, the frontend uses `VITE_API_URL=/api`.

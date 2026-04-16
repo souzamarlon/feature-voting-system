@@ -1,4 +1,11 @@
-import { createFeature, getFeatures, upvoteFeature } from '../services/api'
+import {
+  createFeature,
+  deleteFeature,
+  getFeatures,
+  loginUser,
+  setAuthToken,
+  upvoteFeature,
+} from '../services/api'
 
 describe('api service', () => {
   const fetchMock = vi.fn()
@@ -12,6 +19,7 @@ describe('api service', () => {
   })
 
   afterEach(() => {
+    setAuthToken(null)
     vi.unstubAllGlobals()
     fetchMock.mockReset()
   })
@@ -22,11 +30,11 @@ describe('api service', () => {
     expect(fetchMock).toHaveBeenCalledWith(
       'http://localhost:8000/api/features',
       expect.objectContaining({
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: expect.any(Headers),
       }),
     )
+    const headers = fetchMock.mock.calls[0][1]?.headers as Headers
+    expect(headers.get('Content-Type')).toBe('application/json')
   })
 
   it('posts a new feature to the create endpoint', async () => {
@@ -54,6 +62,35 @@ describe('api service', () => {
       'http://localhost:8000/api/features/42/upvote',
       expect.objectContaining({
         method: 'POST',
+      }),
+    )
+  })
+
+  it('deletes a feature with the delete endpoint', async () => {
+    await deleteFeature(7)
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://localhost:8000/api/features/7',
+      expect.objectContaining({
+        method: 'DELETE',
+      }),
+    )
+  })
+
+  it('posts credentials to the login endpoint', async () => {
+    await loginUser({
+      username: 'admin',
+      password: 'admin123',
+    })
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'http://localhost:8000/api/auth/login',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          username: 'admin',
+          password: 'admin123',
+        }),
       }),
     )
   })

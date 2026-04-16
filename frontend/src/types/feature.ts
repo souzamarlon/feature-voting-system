@@ -4,4 +4,5 @@ export interface Feature {
   description: string
   votes: number
   created_at: string
+  created_by_username: string | null
 }
