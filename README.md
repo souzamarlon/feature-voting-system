@@ -137,15 +137,9 @@ npm run build
 - `fetch` is used instead of Axios to avoid unnecessary dependencies.
 
 ## Trade-Offs
-- No authentication or authorization is included.
 - SQLite is fine for a demo, but not ideal for heavier multi-user production traffic.
 - The frontend uses simple hook-based state management instead of a more advanced caching/data library.
 - Styling is intentionally lightweight and focused on speed over design polish.
-
-## Quick Improvements Under 20 Minutes
-1. Prevent duplicate votes on the client with `localStorage`.
-2. Add a basic search field to filter features by title.
-3. Add small UX polish like loading spinners, empty-state illustrations, or success/error toasts.
 
 ## Future Improvements
 - Add pagination or infinite scroll when the list grows.
