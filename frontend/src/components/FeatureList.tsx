@@ -5,10 +5,22 @@ import type { Feature } from '../types/feature'
 interface FeatureListProps {
   features: Feature[]
   activeVoteId: number | null
+  isReordering: boolean
+  highlightedId: number | null
   onUpvote: (id: number) => Promise<void>
+  onReorderStart: () => void
+  onReorderEnd: () => void
 }
 
-function FeatureList({ features, activeVoteId, onUpvote }: FeatureListProps) {
+function FeatureList({
+  features,
+  activeVoteId,
+  isReordering,
+  highlightedId,
+  onUpvote,
+  onReorderStart,
+  onReorderEnd,
+}: FeatureListProps) {
   if (features.length === 0) {
     return (
       <section className="feature-list feature-list--empty">
@@ -25,12 +37,18 @@ function FeatureList({ features, activeVoteId, onUpvote }: FeatureListProps) {
         <p>Features are sorted automatically by vote count.</p>
       </div>
 
-      <AnimatedList className="feature-list__items">
+      <AnimatedList
+        className="feature-list__items"
+        onReorderStart={onReorderStart}
+        onReorderEnd={onReorderEnd}
+      >
         {features.map((feature) => (
           <FeatureCard
             key={feature.id}
             feature={feature}
             isVoting={activeVoteId === feature.id}
+            isReordering={isReordering}
+            isHighlighted={highlightedId === feature.id}
             onUpvote={onUpvote}
             dataId={feature.id}
           />

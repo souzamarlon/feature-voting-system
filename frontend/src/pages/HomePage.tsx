@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import FeatureForm from '../components/FeatureForm'
 import FeatureList from '../components/FeatureList'
@@ -20,6 +20,9 @@ function HomePage() {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [activeVoteId, setActiveVoteId] = useState<number | null>(null)
+  const [isReordering, setIsReordering] = useState(false)
+  const [highlightedId, setHighlightedId] = useState<number | null>(null)
+  const highlightTimeoutRef = useRef<number | null>(null)
 
   useEffect(() => {
     async function loadFeatures() {
@@ -34,6 +37,14 @@ function HomePage() {
     }
 
     loadFeatures()
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimeoutRef.current !== null) {
+        window.clearTimeout(highlightTimeoutRef.current)
+      }
+    }
   }, [])
 
   async function handleCreateFeature(payload: {
@@ -63,6 +74,16 @@ function HomePage() {
           ),
         ),
       )
+      setHighlightedId(updatedFeature.id)
+
+      if (highlightTimeoutRef.current !== null) {
+        window.clearTimeout(highlightTimeoutRef.current)
+      }
+
+      highlightTimeoutRef.current = window.setTimeout(() => {
+        setHighlightedId(null)
+      }, 800)
+
       setErrorMessage('')
     } catch {
       setErrorMessage('Unable to register your vote right now.')
@@ -94,7 +115,11 @@ function HomePage() {
           <FeatureList
             features={features}
             activeVoteId={activeVoteId}
+            isReordering={isReordering}
+            highlightedId={highlightedId}
             onUpvote={handleUpvote}
+            onReorderStart={() => setIsReordering(true)}
+            onReorderEnd={() => setIsReordering(false)}
           />
         )}
       </div>

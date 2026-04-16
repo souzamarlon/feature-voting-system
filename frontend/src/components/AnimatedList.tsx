@@ -1,14 +1,36 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 
 interface AnimatedListProps {
   children: ReactNode
   className?: string
+  onReorderStart?: () => void
+  onReorderEnd?: () => void
 }
 
-function AnimatedList({ children, className }: AnimatedListProps) {
+function AnimatedList({
+  children,
+  className,
+  onReorderStart,
+  onReorderEnd,
+}: AnimatedListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const previousPositionsRef = useRef<Map<string, DOMRect>>(new Map())
+  const frameIdRef = useRef<number | null>(null)
+  const cleanupIdRef = useRef<number | null>(null)
+  const animationTokenRef = useRef(0)
+
+  useEffect(() => {
+    return () => {
+      if (frameIdRef.current !== null) {
+        cancelAnimationFrame(frameIdRef.current)
+      }
+
+      if (cleanupIdRef.current !== null) {
+        window.clearTimeout(cleanupIdRef.current)
+      }
+    }
+  }, [])
 
   useLayoutEffect(() => {
     const container = containerRef.current
@@ -51,37 +73,42 @@ function AnimatedList({ children, className }: AnimatedListProps) {
       movedItems.push(item)
     }
 
-    let frameId = 0
-    let cleanupId = 0
-
     if (movedItems.length > 0) {
-      frameId = requestAnimationFrame(() => {
+      if (frameIdRef.current !== null) {
+        cancelAnimationFrame(frameIdRef.current)
+      }
+
+      if (cleanupIdRef.current !== null) {
+        window.clearTimeout(cleanupIdRef.current)
+      }
+
+      animationTokenRef.current += 1
+      const animationToken = animationTokenRef.current
+      onReorderStart?.()
+
+      frameIdRef.current = requestAnimationFrame(() => {
         for (const item of movedItems) {
           item.style.transition = 'transform 300ms ease'
           item.style.transform = 'translate(0, 0)'
         }
 
-        cleanupId = window.setTimeout(() => {
+        cleanupIdRef.current = window.setTimeout(() => {
+          if (animationToken !== animationTokenRef.current) {
+            return
+          }
+
           for (const item of movedItems) {
             item.style.transition = ''
             item.style.transform = ''
           }
+
+          onReorderEnd?.()
         }, 300)
       })
     }
 
     previousPositionsRef.current = nextPositions
-
-    return () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId)
-      }
-
-      if (cleanupId) {
-        window.clearTimeout(cleanupId)
-      }
-    }
-  }, [children])
+  }, [children, onReorderEnd, onReorderStart])
 
   return (
     <div ref={containerRef} className={className}>

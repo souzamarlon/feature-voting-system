@@ -162,6 +162,9 @@
 
 .feature-card__meta {
   margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .feature-card__badge {
@@ -174,6 +177,16 @@
   font-weight: 700;
 }
 
+.feature-card__status {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
 .feature-card h3 {
   margin: 0 0 8px;
   font-size: 1.1rem;
@@ -181,6 +194,30 @@
 
 .feature-card__button {
   min-width: 96px;
+}
+
+.feature-card--highlighted {
+  animation: card-highlight 800ms ease;
+}
+
+@keyframes card-highlight {
+  0% {
+    box-shadow:
+      0 16px 40px rgba(15, 23, 42, 0.08),
+      0 0 0 0 rgba(79, 70, 229, 0.5);
+  }
+
+  40% {
+    box-shadow:
+      0 16px 40px rgba(15, 23, 42, 0.08),
+      0 0 0 6px rgba(79, 70, 229, 0.25);
+  }
+
+  100% {
+    box-shadow:
+      0 16px 40px rgba(15, 23, 42, 0.08),
+      0 0 0 0 rgba(79, 70, 229, 0);
+  }
 }
 
 @media (max-width: 900px) {
