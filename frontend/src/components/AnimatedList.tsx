@@ -16,6 +16,7 @@ function AnimatedList({
 }: AnimatedListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const previousPositionsRef = useRef<Map<string, DOMRect>>(new Map())
+  const previousOrderRef = useRef<string[]>([])
   const frameIdRef = useRef<number | null>(null)
   const cleanupIdRef = useRef<number | null>(null)
   const animationTokenRef = useRef(0)
@@ -42,8 +43,17 @@ function AnimatedList({
     const items = Array.from(
       container.querySelectorAll<HTMLElement>('[data-id]'),
     )
+    const nextOrder = items
+      .map((item) => item.dataset.id)
+      .filter((id): id is string => Boolean(id))
     const nextPositions = new Map<string, DOMRect>()
     const movedItems: HTMLElement[] = []
+    const orderChanged =
+      previousOrderRef.current.length > 0 &&
+      (
+        previousOrderRef.current.length !== nextOrder.length ||
+        previousOrderRef.current.some((id, index) => nextOrder[index] !== id)
+      )
 
     for (const item of items) {
       const id = item.dataset.id
@@ -64,7 +74,7 @@ function AnimatedList({
       const deltaX = previousRect.left - nextRect.left
       const deltaY = previousRect.top - nextRect.top
 
-      if (deltaX === 0 && deltaY === 0) {
+      if (!orderChanged || (deltaX === 0 && deltaY === 0)) {
         continue
       }
 
@@ -108,6 +118,7 @@ function AnimatedList({
     }
 
     previousPositionsRef.current = nextPositions
+    previousOrderRef.current = nextOrder
   }, [children, onReorderEnd, onReorderStart])
 
   return (

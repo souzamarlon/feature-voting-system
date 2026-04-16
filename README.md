@@ -76,14 +76,17 @@ Local setup is optional. Python `3.11+` is recommended for the backend.
    cd frontend
    npm install
    ```
-2. Start the dev server:
+2. Create `frontend/.env` from `frontend/.env.example`.
+3. Start the dev server:
    ```bash
    npm run dev
    ```
-3. Open `http://localhost:3000`.
+4. Open `http://localhost:3000`.
 
 ## Environment Variables
 ### Frontend
+Create `frontend/.env` from `frontend/.env.example`.
+
 File: `frontend/.env`
 
 ```env

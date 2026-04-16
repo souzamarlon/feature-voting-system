@@ -2,3 +2,5 @@
 2026-04-16T11:19:07.1222146-06:00 | Improve rapid upvote reorder behavior | Started implementing animated list reordering so cards visibly move during vote-based resorting and are easier to track.
 2026-04-16T11:25:00.6264824-06:00 | Improve reorder UX and click safety | Started adding short reorder locking, clearer motion feedback, and a highlighted updated card to reduce accidental votes during list resorting.
 2026-04-16T11:50:41.3397087-06:00 | Add seed_users command to README | Updated the Docker setup instructions to include running the backend seed command for demo users.
+2026-04-16T11:55:00.5533271-06:00 | Fix disabled buttons on Admin feature card | Investigated the list reorder state and started narrowing the animation lock so only real item-order changes disable actions.
+2026-04-16T12:02:13.3436618-06:00 | Standardize frontend env example | Added a standard frontend env example file, updated README setup instructions, and removed the nonstandard duplicate example.
